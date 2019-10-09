@@ -11,8 +11,28 @@ Usage:			from RealtyModule import Get_Zillow_Data, Get_Homes
 Description:	Provides library of functions for stream-lined use in other scripts relating to realty project.
 
 Functions:		Get_Zillow_Data
-7Get_Homes
 
+					Description: Provides details on homes based on their address.
+
+					Usage: Get_Zillow_Data(address, zipcode, Zkey)
+
+					Params:	-address: Address as string.
+							-zipcode: Zip code as string.
+							-Zkey: Zillow API key as string.
+					
+					Returns: Dict object with the following parameters as strings:
+								-Zillow ID
+								-Zestimate
+								-Lot Size
+								-Square Feet
+								-Bedrooms
+								-Bathrooms
+								-Year Built
+								-Home Type
+								-Listing Link
+				
+				Get_Homes
+				
 					Description: Provides a list of homes currently for sale on zillow within the provided area.
 
 					Usage: Get_Homes(city-state)
