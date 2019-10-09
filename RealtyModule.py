@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------------------------------------------
 Name:			RealtyModule.py
 
-Version:		1.0-1
+Version:		1.0-2
 
 Author:			Seth Pruitt
 
@@ -11,27 +11,7 @@ Usage:			from RealtyModule import Get_Zillow_Data, Get_Homes
 Description:	Provides library of functions for stream-lined use in other scripts relating to realty project.
 
 Functions:		Get_Zillow_Data
-
-					Description: Provides details on homes based on their address.
-
-					Usage: Get_Zillow_Data(address, zipcode, Zkey)
-
-					Params:	-address: Address as string.
-							-zipcode: Zip code as string.
-							-Zkey: Zillow API key as string.
-
-					Returns: Dict object with the following parameters as strings:
-								-Zillow ID
-								-Zestimate
-								-Lot Size
-								-Square Feet
-								-Bedrooms
-								-Bathrooms
-								-Year Built
-								-Home Type
-								-Listing Link
-				
-				Get_Homes
+7Get_Homes
 
 					Description: Provides a list of homes currently for sale on zillow within the provided area.
 
@@ -85,26 +65,9 @@ def Get_Homes(city_state):
 	URL = baseURL + city_state + '/'
 	headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'}
 
-	page = requests.get(URL, headers=headers)
-	soup = BeautifulSoup(page.content, 'html.parser')
-
-	homes = soup.find_all('article', 'list-card list-card-short list-card_not-saved')
-	for home in homes:
-		fulladdress = home.find("h3", "list-card-addr").contents[0]
-		zipcode = fulladdress.split()[-1]
-		address = fulladdress[:-6]
-		AskingPrice = home.find('div', 'list-card-price').contents[0]
-		homesdata.append({'Address':address, 'Zip Code':zipcode, 'Asking Price':AskingPrice})
-
-	pagination = soup.find("div", "search-pagination")
-
-	pages = pagination.find_all("a")
-	NextPage = pages[-1]['href']
-	if pages[-1]['aria-label'] == 'NEXT Page':
-		pagable = True
+	pagable = True
 
 	while pagable == True:
-		URL = baseURL + NextPage
 		page = requests.get(URL, headers=headers)
 		soup = BeautifulSoup(page.content, 'html.parser')
 		
@@ -121,6 +84,7 @@ def Get_Homes(city_state):
 		if pages[-1]['aria-label'] == 'NEXT Page':
 			pagable = True
 			NextPage = pages[-1]['href']
+			URL = baseURL + NextPage
 		else:
 			pagable = False
 
