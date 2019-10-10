@@ -32,7 +32,7 @@ Functions:		Get_Zillow_Data
 								-Listing Link
 				
 				Get_Homes
-				
+
 					Description: Provides a list of homes currently for sale on zillow within the provided area.
 
 					Usage: Get_Homes(city-state)
@@ -94,10 +94,12 @@ def Get_Homes(city_state):
 		homes = soup.find_all('article', 'list-card list-card-short list-card_not-saved')
 		for home in homes:
 			fulladdress = home.find("h3", "list-card-addr").contents[0]
-			zipcode = fulladdress.split()[-1]
-			address = fulladdress[:-6]
-			AskingPrice = home.find('div', 'list-card-price').contents[0]
-			homesdata.append({'Address':address, 'Zip Code':zipcode, 'Asking Price':AskingPrice})
+			ztype = ', '.join(fulladdress[-5:]).replace(', ', '')
+			if ztype.isdigit():
+				zipcode = fulladdress[-5:]
+				address = fulladdress[:-6]
+				AskingPrice = home.find('div', 'list-card-price').contents[0]
+				homesdata.append({'Address':address, 'Zip Code':zipcode, 'Asking Price':AskingPrice})
 		
 		pagination = soup.find("div", "search-pagination")
 		pages = pagination.find_all("a")
